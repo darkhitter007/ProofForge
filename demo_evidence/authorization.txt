@@ -1,0 +1,4 @@
+Synthetic authorization record
+Scope: example.invalid only
+Environment: local/offline demonstration
+Real systems: prohibited
