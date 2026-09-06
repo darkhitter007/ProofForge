@@ -1,8 +1,7 @@
 # Contributing
 
 ```bash
-python -m pip install -e .
-python -m pip install pytest
+python -m pip install -e ".[dev]"
 PYTHONPATH=src python -m pytest -q
 ```
 
