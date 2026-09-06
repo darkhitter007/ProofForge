@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.3.2
+- Adversarial verifier suite (`tests/test_adversarial.py`) covering content/chain/zip-slip failures
+- README hero demo with real verifier status codes
+- Hygiene carried forward from the 0.1.3.1 documentation/CI line
+- Public release provenance via new tag `v0.1.3.2` (historical `v0.1.3.1` tag left untouched)
+
 ## 0.1.3.1
 - First public release candidate
 - Fixed Termux temporary-directory handling
