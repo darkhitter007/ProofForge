@@ -12,8 +12,8 @@ jobs:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install
@@ -24,3 +24,10 @@ jobs:
         run: python -m pytest -q
         env:
           PYTHONPATH: src
+
+  checksums:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Verify release checksums
+        run: sha256sum -c release/SHA256SUMS
