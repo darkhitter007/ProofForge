@@ -1,9 +1,9 @@
 {
   "project": "ProofForge",
-  "version": "0.1.3.2",
-  "tests": "8 passed in 0.07s",
+  "version": "0.1.3.3",
+  "tests": "17 passed in 0.14s",
   "tests_passed": true,
   "termux_field_demo_passed": true,
   "release_clean": true,
-  "notes": "Current public kit. Adds adversarial verifier suite and README hero demo atop the 0.1.3.1 hygiene line. Provenance is tag v0.1.3.2; historical tag v0.1.3.1 is left untouched."
+  "notes": "Security release. Path confinement (PATH_ESCAPE) for verify/identity, case_id hardening, ingest symlink confinement. Provenance is tag v0.1.3.3. Do not use vulnerable 0.1.3.2 / 0.1.3.1 kits."
 }

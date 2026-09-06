@@ -1,8 +1,8 @@
-# ProofForge v0.1.3.2 Release Notes
+# ProofForge v0.1.3.3 Release Notes
 
-This is the current public release kit for ProofForge.
+This is a **security release**. Upgrade to **0.1.3.3**.
 
-The historical tag `v0.1.3.1` remains on an earlier tree and is not moved; use `v0.1.3.2` for the current kit.
+Earlier public kits **0.1.3.2** and **0.1.3.1** are vulnerable to path escape during verification/identity (crafted relative paths in `evidence_manifest` could cause ProofForge to read/rehash files outside the case root). Do not use them for new work; use tag `v0.1.3.3`.
 
 ## Core capabilities
 
@@ -15,12 +15,15 @@ The historical tag `v0.1.3.1` remains on an earlier tree and is not moved; use `
 - safe ZIP extraction
 - offline standard-library runtime
 - adversarial verifier coverage (content tamper, chain reorder, zip-slip)
+- path confinement for verify, identity, case_id, and ingest (PATH_ESCAPE)
 
-## What changed in 0.1.3.2
+## What changed in 0.1.3.3
 
-- adversarial verifier suite and README hero demo
-- repo hygiene from the 0.1.3.1 documentation/CI line
-- version and release provenance aligned on tag `v0.1.3.2`
+- **Security fix:** confine paths so `verify_case` / `compute_case_identity` cannot hash outside the case (`PATH_ESCAPE`)
+- Harden `case_id` validation and ingest destination/symlink handling
+- New `src/proofforge/paths.py` helpers (`ensure_within`, `safe_join`, `validate_case_id`)
+- Path-safety tests in `tests/test_path_safety.py`
+- Version and release provenance aligned on tag `v0.1.3.3`
 
 ## Known limitations
 

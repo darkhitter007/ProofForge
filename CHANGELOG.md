@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.3.3
+- **Security:** path confinement so verify/identity cannot hash files outside the case root (`PATH_ESCAPE`)
+- Harden `case_id` / `case_path` against path-escape tricks (`validate_case_id`)
+- Confine ingest destinations and reject symlink collection via `paths.ensure_within` / `safe_join`
+- New helpers in `src/proofforge/paths.py` and coverage in `tests/test_path_safety.py`
+- Public release provenance via tag `v0.1.3.3` (do not use vulnerable `0.1.3.2` / `0.1.3.1` kits)
+
 ## 0.1.3.2
 - Adversarial verifier suite (`tests/test_adversarial.py`) covering content/chain/zip-slip failures
 - README hero demo with real verifier status codes

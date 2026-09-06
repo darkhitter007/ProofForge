@@ -1,6 +1,6 @@
 # ProofForge
 
-**v0.1.3.2** — Verifiable evidence packages for authorized security disclosures.
+**v0.1.3.3** — Verifiable evidence packages for authorized security disclosures.
 
 ProofForge turns user-supplied disclosure evidence into a deterministic, independently verifiable package with a chained proof trail and a stable package identity.
 
