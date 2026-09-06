@@ -6,6 +6,7 @@ from .hashing import sha256_file
 from .canonical import canonical_json
 from .chain import verify_chain
 from .identity import compute_case_identity
+from .paths import safe_join
 
 REQUIRED_FILES = [
     "CASE_MANIFEST.json",
@@ -44,7 +45,12 @@ def verify_case(case_id: str, workspace: Path) -> dict:
             errors.append({"code": "INVALID_EVIDENCE_MANIFEST", "detail": str(exc)})
         for record in records:
             rel = record["path"]
-            path = root / rel
+            try:
+                path = safe_join(root, rel)
+            except ValueError as exc:
+                errors.append({"code": "PATH_ESCAPE", "path": rel, "detail": str(exc)})
+                checks.append({"check": "evidence_hash", "path": rel, "ok": False})
+                continue
             if not path.exists():
                 errors.append({"code": "MISSING_EVIDENCE", "path": rel})
                 checks.append({"check": "evidence_hash", "path": rel, "ok": False})

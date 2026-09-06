@@ -1,10 +1,12 @@
 from __future__ import annotations
 from pathlib import Path
 import json
+import os
 import shutil
 from .schema import CaseManifest
 from .canonical import canonical_json
 from .hashing import sha256_file
+from .paths import ensure_within, safe_join, validate_case_id
 
 CASE_DIRS = [
     "evidence/originals",
@@ -25,7 +27,9 @@ TEMPLATE_FILES = {
 }
 
 def case_path(case_id: str, workspace: Path) -> Path:
-    return workspace / case_id
+    validate_case_id(case_id)
+    ws = workspace.resolve()
+    return ensure_within(ws, ws / case_id)
 
 def init_case(case_id: str, title: str, workspace: Path, force: bool = False) -> Path:
     root = case_path(case_id, workspace)
@@ -45,6 +49,28 @@ def init_case(case_id: str, title: str, workspace: Path, force: bool = False) ->
         path.write_text(body, encoding="utf-8")
     return root
 
+def _iter_ingest_sources(source: Path):
+    """Yield regular files under *source* without following symlinks."""
+    if source.is_symlink():
+        raise ValueError(f"Refusing to ingest symlink: {source}")
+    if source.is_file():
+        yield source
+        return
+    if not source.is_dir():
+        raise FileNotFoundError(source)
+    for dirpath, dirnames, filenames in os.walk(source, followlinks=False):
+        # Do not descend into symlinked directories
+        dirnames[:] = [
+            d for d in dirnames
+            if not (Path(dirpath) / d).is_symlink()
+        ]
+        for name in filenames:
+            p = Path(dirpath) / name
+            if p.is_symlink():
+                raise ValueError(f"Refusing to ingest symlink: {p}")
+            if p.is_file():
+                yield p
+
 def ingest(case_id: str, source: Path, workspace: Path) -> list[dict]:
     root = case_path(case_id, workspace)
     if not root.exists():
@@ -52,14 +78,24 @@ def ingest(case_id: str, source: Path, workspace: Path) -> list[dict]:
     if not source.exists():
         raise FileNotFoundError(source)
 
-    originals = root / "evidence" / "originals"
+    originals = (root / "evidence" / "originals").resolve()
+    originals.mkdir(parents=True, exist_ok=True)
+    ensure_within(root.resolve(), originals)
+
     records = []
-    items = [source] if source.is_file() else [p for p in source.rglob("*") if p.is_file()]
+    items = list(_iter_ingest_sources(source))
     for src in sorted(items):
-        rel = src.name if source.is_file() else str(src.relative_to(source))
-        dest = originals / rel
+        if source.is_file():
+            rel = src.name
+        else:
+            rel = str(src.relative_to(source)).replace("\\", "/")
+        dest = safe_join(originals, rel)
         dest.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(src, dest)
+        # copyfile does not preserve metadata via symlink tricks the same way;
+        # still refuse if somehow dest escaped (safe_join already checked).
+        shutil.copy2(src, dest, follow_symlinks=True)
+        # Re-validate dest after copy in case of TOCTOU / link games
+        ensure_within(originals, dest)
         records.append({
             "path": str(dest.relative_to(root)).replace("\\", "/"),
             "sha256": sha256_file(dest),
