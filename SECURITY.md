@@ -1,6 +1,6 @@
 # Security Policy
 
-Supported release: `0.1.3.1`.
+Supported release: `0.1.3.2`.
 
 ## Reporting a vulnerability
 

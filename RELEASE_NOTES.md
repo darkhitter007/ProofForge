@@ -1,6 +1,8 @@
-# ProofForge v0.1.3.1 Release Notes
+# ProofForge v0.1.3.2 Release Notes
 
-This is ProofForge's first public release candidate.
+This is the current public release kit for ProofForge.
+
+The historical tag `v0.1.3.1` remains on an earlier tree and is not moved; use `v0.1.3.2` for the current kit.
 
 ## Core capabilities
 
@@ -12,14 +14,13 @@ This is ProofForge's first public release candidate.
 - independent ZIP verification
 - safe ZIP extraction
 - offline standard-library runtime
+- adversarial verifier coverage (content tamper, chain reorder, zip-slip)
 
-## Cleanup in this release
+## What changed in 0.1.3.2
 
-- baked in Termux `$TMPDIR` handling
-- removed caches and compiled bytecode
-- added public-release documentation
-- added field-validation evidence
-- regenerated checksums
+- adversarial verifier suite and README hero demo
+- repo hygiene from the 0.1.3.1 documentation/CI line
+- version and release provenance aligned on tag `v0.1.3.2`
 
 ## Known limitations
 

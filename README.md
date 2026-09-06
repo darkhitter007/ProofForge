@@ -1,6 +1,6 @@
 # ProofForge
 
-**v0.1.3.1** — Verifiable evidence packages for authorized security disclosures.
+**v0.1.3.2** — Verifiable evidence packages for authorized security disclosures.
 
 ProofForge turns user-supplied disclosure evidence into a deterministic, independently verifiable package with a chained proof trail and a stable package identity.
 
@@ -73,7 +73,7 @@ proofforge verify-bundle path/to/JUDGE-001_pf2-..._evidence_bundle.zip
 Keep the repo in Termux private storage, then:
 
 ```bash
-cd ~/proofforge_v0_1_3_1   # or your checkout path
+cd ~/proofforge_v0_1_3_2   # or your checkout path
 python -m pip install -e ".[dev]"
 chmod +x scripts/judge_demo.sh
 ./scripts/judge_demo.sh
